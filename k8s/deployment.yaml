@@ -32,7 +32,7 @@ spec:
           image: 19269506/postgres-demo
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 9898
+            - containerPort: 8080
           env:   # Setting Environmental Variables
             - name: SPRING_PROFILES_ACTIVE
               value: dev
