@@ -9,8 +9,8 @@ spec:
   selector:
     app: postgres-demo
   ports:
-    - port: 9898
-      targetPort: 9898
+    - port: 8080
+      targetPort: 8080
       nodePort: 30160
 ---
 apiVersion: apps/v1
@@ -21,7 +21,7 @@ spec:
   selector:
     matchLabels:
       app: postgres-demo
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
