@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred')
-    DOCKERHUB_USERNAME = "119269506"
+    DOCKERHUB_USERNAME = "19269506"
     APP_NAME = "postgres-demo"
     IMAGE_TAG = "${BUILD_NUMBER}"
     IMAGE_NAME = "${DOCKERHUB_USERNAME}" + "/" + "${APP_NAME}"
