@@ -44,27 +44,28 @@ pipeline {
         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
         sh 'docker push ${IMAGE_NAME}:${IMAGE_TAG}'
         sh 'docker push ${IMAGE_NAME}:latest'
-        sh 'docker image rm -f ${IMAGE_NAME}:${IMAGE_TAG}'
-        sh 'docker image rm -f ${IMAGE_NAME}:latest"'
+        // sh 'docker image rm -f ${IMAGE_NAME}:${IMAGE_TAG}'
+        // sh 'docker image rm -f ${IMAGE_NAME}:latest'
       }
     }
     stage('Updating Kubernetes deployment file') {
       steps {
-        sh "cat k8s/deployment.yml"
-        sh "sed -i 's/${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}/g' k8s/deployment.yml"
-        sh "cat deployment.yml"
+        sh "cat k8s/deployment.yaml"
+        sh "sed -i 's@${IMAGE_NAME}.*@${IMAGE_NAME}:${IMAGE_TAG}@g' k8s/deployment.yaml"
+        sh "cat k8s/deployment.yaml"
       }
     }
-
     stage('Push the changed deployment file to Git') {
       steps {
         script {
-          sh 'git config--global user.name "nhanduongn"'
-          sh 'git config--global user.email "nhanduongn2000@gmail.com"'
-          sh 'git add deployment.yml'
-          sh 'git commit - m "Updated the deployment file"'
-          withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'pass', usernameVariable: 'user')]) {
-            sh 'git push http://$user:$pass@github.com/nhandn-devops/postgres-demo.git master'
+          sh """
+          git config --global user.name "nhanduongn"
+          git config --global user.email "nhanduongn2000@gmail.com"
+          git add k8s/deployment.yaml
+          git commit -m 'Updated the deployment file'
+          """
+          withCredentials([usernamePassword(credentialsId: 'github-cre', passwordVariable: 'pass', usernameVariable: 'user')]) {
+            sh "git push http://$user:$pass@github.com/nhandn-devops/postgres-demo.git master dev"
           }
         }
       }

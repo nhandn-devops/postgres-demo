@@ -19,6 +19,10 @@ public class AnswerController {
     @Autowired
     private QuestionRepository questionRepository;
 
+    @GetMapping("/answers")
+    public String welcomeQuestion() {
+        return "Welcome to answers!!!";
+    }
     @GetMapping("/questions/{questionId}/answers")
     public List<Answer> getAnswersByQuestionId(@PathVariable Long questionId) {
         return answerRepository.findByQuestionId(questionId);
